@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webinar IA</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <!--Fuentes-->
+    <style>
+        @font-face {
+            font-family: "TimesSans";
+            src: url("fonts/times_sans_serif/TIMESS__.ttf") format("truetype");
+        }
+
+        @font-face {
+            font-family: "Milker";
+            src: url("fonts/milker/Milker.otf") format("opentype");
+        }
+
+        @font-face {
+            font-family: "SimplyOlive";
+            src: url("fonts/simply_olive/Simply Olive DEMO.ttf") format("truetype");
+        }
+
+        @font-face {
+            font-family: "LemonMilk";
+            src: url("fonts/lemon_milk/LEMONMILK-Medium.otf") format("opentype");
+        }
+    </style>
+</head>
+
+<body>
+
+    <!--BANNER-->
+    <section class="banner">
+        <video class="banner-video" autoplay muted loop playsinline>
+            <source src="Img/Inteligencia.mp4" type="video/mp4">
+        </video>
+
+        <header class="header">
+            <nav class="nav">
+                <a href="#informacion">Información</a>
+                <a href="#beneficios">Beneficios</a>
+                <a href="#registro">Registro</a>
+            </nav>
+        </header>
+    </section>
+
+    <!--SECCIÓN 1 y 2-->
+    <section class="split-section">
+
+        <!-- IZQUIERDA IMAGEN -->
+        <div class="left-panel info-image"></div>
+
+        <!-- DERECHA TEXTO -->
+        <div class="right-panel">
+
+            <div class="content-block" id="informacion">
+                <h2>Información</h2>
+                <p>
+                    Participa en nuestro webinar sobre
+                    <span class="highlight-white">Introducción práctica a la Inteligencia Artificial</span>, donde
+                    aprenderás cómo usar herramientas de IA en tu vida profesional o académica.
+                    El seminario se llevará a cabo el
+                    <span class="highlight-white">15 de febrero de 2026</span> de
+                    <span class="highlight-white">10:00 a 13:00 hrs</span> de manera
+                    <span class="highlight-white">100% en línea</span>, con ejemplos prácticos y aplicaciones reales
+                    para que puedas aplicar los conocimientos desde el primer día.
+                </p>
+            </div>
+
+
+            <div class="content-block" id="beneficios">
+                <h2>Beneficios</h2>
+                <p>
+                    Al asistir a este webinar descubrirás cómo la IA puede ayudarte a optimizar procesos, ahorrar tiempo
+                    y mejorar la toma de decisiones. Obtendrás acceso a
+                    <span class="highlight-white">material exclusivo de apoyo</span>, la oportunidad de
+                    <span class="highlight-white">resolver dudas en vivo</span> y conectar con otros participantes
+                    interesados en la temática. Al finalizar, recibirás un
+                    <span class="highlight-white">certificado de participación</span> y formarás parte de una comunidad
+                    que busca aprovechar la tecnología de forma estratégica y responsable.
+                </p>
+            </div>
+
+
+        </div>
+    </section>
+
+    <!--SECCIÓN 3 REGISTRO-->
+    <section id="registro" class="registro-section">
+
+        <!-- IZQUIERDA FORMULARIO -->
+        <div class="registro-left">
+            <div class="form-container">
+                <h2>Regístrate al Webinar</h2>
+
+                <form id="registroForm">
+                    <label for="nombre">Nombre Completo</label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+
+                    <label for="correo">Correo Electrónico</label>
+                    <input type="email" id="correo" name="correo" placeholder="tu@email.com" required>
+
+                    <label for="empresa">Empresa</label>
+                    <input type="text" id="empresa" name="empresa" placeholder="Tu empresa">
+
+                    <label for="telefono">Teléfono</label>
+                    <input type="tel" id="telefono" name="telefono" placeholder="(Opcional)">
+
+                    <button type="submit">Registrarse</button>
+                    <p id="successMessage" class="success-message" style="display: none;">¡Registro exitoso!</p>
+                </form>
+            </div>
+        </div>
+
+        <!-- DERECHA IMAGEN -->
+        <div class="registro-right">
+            <img src="img/Inteligencia.jpg" alt="Registro">
+        </div>
+
+    </section>
+
+    <!--JS FORMULARIO-->
+    <script>
+        const form = document.getElementById('registroForm');
+        const successMessage = document.getElementById('successMessage');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+
+            const formData = {
+                nombre: form.nombre.value,
+                correo: form.correo.value,
+                empresa: form.empresa.value,
+                telefono: form.telefono.value
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    successMessage.style.display = 'block'; 
+                    form.reset(); 
+                } else {
+                    alert('Hubo un error al registrar el formulario.');
+                }
+
+            } catch (error) {
+                console.error('Error enviando formulario:', error);
+                alert('Error enviando formulario, revisa la consola.');
+            }
+        });
+    </script>
+
+</body>
+
+</html>

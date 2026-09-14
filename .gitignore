@@ -1,0 +1,17 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno
+.env
+*.env
+
+# Credenciales
+credentials.json
+**/credentials.json
+
+# Logs
+*.log
+
+# Sistema
+.DS_Store
+Thumbs.db
