@@ -5,7 +5,7 @@ const { addRegistration } = require('./googleSheets'); // <- Importamos módulo
 const { sendConfirmationEmail } = require('./mailer');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.json());

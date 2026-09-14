@@ -1,16 +1,15 @@
-// googleSheets.js
+require('dotenv').config();
 const { google } = require('googleapis');
-const path = require('path');
-
-// Ruta a tu archivo de credenciales JSON
-const CREDENTIALS_PATH = path.join(__dirname, 'credentials.json');
 
 // ID de tu hoja de Google Sheets
-const SPREADSHEET_ID = '1HNAfn66nd6BX1kARe4mRDTzyIyvt1NxKdeflmAv3iSI'; // <-- reemplaza con el ID de tu hoja
+const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 
-// Autenticación con la cuenta de servicio
+// Autenticación con la cuenta de servicio mediante variables de entorno
 const auth = new google.auth.GoogleAuth({
-    keyFile: CREDENTIALS_PATH,
+    credentials: {
+        client_email: process.env.GOOGLE_CLIENT_EMAIL,
+        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n')
+    },
     scopes: ['https://www.googleapis.com/auth/spreadsheets']
 });
 
@@ -22,25 +21,39 @@ async function addRegistration(nombre, correo, empresa, telefono) {
 
         const fecha = new Date().toLocaleString();
 
-        console.log('Agregando a Sheets:', [nombre, correo, empresa, telefono, fecha]);
+        console.log('Agregando a Sheets:', [
+            nombre,
+            correo,
+            empresa,
+            telefono,
+            fecha
+        ]);
 
         await sheets.spreadsheets.values.append({
             spreadsheetId: SPREADSHEET_ID,
-            range: 'A2:E',              // fila 2 en adelante, debajo de encabezados
-            valueInputOption: 'RAW',    // escribe tal cual lo envías
-            insertDataOption: 'INSERT_ROWS', // agrega nuevas filas
+            range: 'A2:E',
+            valueInputOption: 'RAW',
+            insertDataOption: 'INSERT_ROWS',
             resource: {
-                values: [[nombre, correo, empresa, telefono, fecha]]
+                values: [[
+                    nombre,
+                    correo,
+                    empresa,
+                    telefono,
+                    fecha
+                ]]
             }
         });
 
         console.log('Registro agregado correctamente ✅');
+
     } catch (error) {
         console.error('Error agregando registro en Sheets:', error);
+        throw error;
     }
 }
 
-// Función opcional para probar conexión y ver encabezados
+// Función para probar la conexión con Google Sheets
 async function testConnection() {
     try {
         const client = await auth.getClient();
@@ -48,14 +61,18 @@ async function testConnection() {
 
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEET_ID,
-            range: 'A1:E1', // encabezados
+            range: 'A1:E1'
         });
 
         console.log('Datos actuales en la hoja:', response.data.values);
+
     } catch (error) {
         console.error('Error probando conexión con Sheets:', error);
+        throw error;
     }
 }
 
-// Exportamos la función
-module.exports = { addRegistration, testConnection };
+module.exports = {
+    addRegistration,
+    testConnection
+};
